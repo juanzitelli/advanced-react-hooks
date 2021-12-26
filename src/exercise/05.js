@@ -4,7 +4,8 @@
 import * as React from 'react'
 
 // 🐨 wrap this in a React.forwardRef and accept `ref` as the second argument
-const MessagesDisplay = ({messages}) => {
+
+const MessagesDisplay = React.forwardRef(({messages}, ref) => {
   const containerRef = React.useRef()
   React.useLayoutEffect(() => {
     scrollToBottom()
@@ -20,6 +21,13 @@ const MessagesDisplay = ({messages}) => {
   // 🐨 call useImperativeHandle here with your ref and a callback function
   // that returns an object with scrollToTop and scrollToBottom
 
+  React.useImperativeHandle(ref, () => {
+    return {
+      scrollToBottom,
+      scrollToTop,
+    }
+  })
+
   return (
     <div ref={containerRef} role="log">
       {messages.map((message, index, array) => (
@@ -30,7 +38,7 @@ const MessagesDisplay = ({messages}) => {
       ))}
     </div>
   )
-}
+})
 
 const App = () => {
   const messageDisplayRef = React.useRef()
