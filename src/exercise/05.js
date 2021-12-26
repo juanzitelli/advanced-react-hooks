@@ -4,17 +4,16 @@
 import * as React from 'react'
 
 // 🐨 wrap this in a React.forwardRef and accept `ref` as the second argument
-function MessagesDisplay({messages}) {
+const MessagesDisplay = ({messages}) => {
   const containerRef = React.useRef()
   React.useLayoutEffect(() => {
     scrollToBottom()
   })
 
-  // 💰 you're gonna want this as part of your imperative methods
-  // function scrollToTop() {
-  //   containerRef.current.scrollTop = 0
-  // }
-  function scrollToBottom() {
+  const scrollToTop = () => {
+    containerRef.current.scrollTop = 0
+  }
+  const scrollToBottom = () => {
     containerRef.current.scrollTop = containerRef.current.scrollHeight
   }
 
@@ -33,7 +32,7 @@ function MessagesDisplay({messages}) {
   )
 }
 
-function App() {
+const App = () => {
   const messageDisplayRef = React.useRef()
   const [messages, setMessages] = React.useState(allMessages.slice(0, 8))
   const addMessage = () =>
