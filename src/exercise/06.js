@@ -3,10 +3,12 @@
 
 import * as React from 'react'
 
+const formatDebugValue = ({query, isMatchingQuery}) =>
+  `\`${query}\` => ${isMatchingQuery ? '✅' : '❌'}`
+
 function useMedia(query, initialState = false) {
-  const [state, setState] = React.useState(initialState)
-  // 🐨 call React.useDebugValue here.
-  // 💰 here's the formatted label I use: `\`${query}\` => ${state}`
+  const [isMatchingQuery, setIsMatchingQuery] = React.useState(initialState)
+  React.useDebugValue({query, isMatchingQuery}, formatDebugValue)
 
   React.useEffect(() => {
     let mounted = true
@@ -15,19 +17,19 @@ function useMedia(query, initialState = false) {
       if (!mounted) {
         return
       }
-      setState(Boolean(mql.matches))
+      setIsMatchingQuery(Boolean(mql.matches))
     }
 
-    mql.addListener(onChange)
-    setState(mql.matches)
+    mql.addEventListener('change', onChange)
+    setIsMatchingQuery(mql.matches)
 
     return () => {
       mounted = false
-      mql.removeListener(onChange)
+      mql.removeEventListener('change', onChange)
     }
   }, [query])
 
-  return state
+  return isMatchingQuery
 }
 
 function Box() {
